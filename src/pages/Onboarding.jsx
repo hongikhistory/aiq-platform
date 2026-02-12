@@ -34,11 +34,7 @@ export default function Onboarding() {
   };
 
   const handleGoogleLogin = async () => {
-    // Check for mock config
-    if (auth.app.options.apiKey === "mock_key") {
-      alert("Firebase 설정이 올바르지 않습니다. .env 파일을 확인해주세요.");
-      return;
-    }
+
 
     setIsLoading(true);
     try {

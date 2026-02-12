@@ -5,12 +5,12 @@ import { getFirestore } from "firebase/firestore";
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "mock_key",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "mock_project.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "mock_project",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "mock_project.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "1234567890",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:1234567890:web:123456"
+  apiKey: "AIzaSyCQj-qVBJqVtD3yvMh5u0waoFufIlDGBMI",
+  authDomain: "aiq-test-b05dd.firebaseapp.com",
+  projectId: "aiq-test-b05dd",
+  storageBucket: "aiq-test-b05dd.firebasestorage.app",
+  messagingSenderId: "929529266190",
+  appId: "1:929529266190:web:8fa5631d1e92e7c7c57c5f"
 };
 
 // Initialize Firebase
