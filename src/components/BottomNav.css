@@ -5,14 +5,21 @@
   transform: translateX(-50%);
   width: 100%;
   max-width: 480px;
-  background-color: var(--white);
-  border-top: 1px solid #EEE;
+  height: 80px;
   display: flex;
   justify-content: space-around;
-  padding: 12px 0;
-  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  align-items: center;
   z-index: 100;
-  box-shadow: 0 -4px 12px rgba(0,0,0,0.03);
+  padding-bottom: 20px; /* Safe area */
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .nav-item {

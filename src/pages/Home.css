@@ -6,7 +6,17 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  margin-bottom: 24px;
+  padding: 12px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  margin: -20px -20px 24px -20px; /* Negate parent padding */
+  
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .logo {
