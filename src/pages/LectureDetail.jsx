@@ -26,7 +26,7 @@ export default function LectureDetail() {
         const lectureRef = doc(db, 'lectures', id);
         const lectureSnap = await getDoc(lectureRef);
         
-        if (lectureSnap.exists()) {
+        if (lectureSnap.exists() && lectureSnap.data().title) {
           const lectureData = lectureSnap.data();
           setLecture(lectureData);
           
@@ -43,6 +43,7 @@ export default function LectureDetail() {
             }
           }
         } else {
+             console.warn("Lecture not found in DB or invalid, using fallback");
              // Fallback to local data
              const localLecture = LECTURES.find(l => l.id == id);
              if (localLecture) {

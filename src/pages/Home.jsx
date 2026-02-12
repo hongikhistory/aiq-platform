@@ -43,10 +43,14 @@ export default function Home() {
         const q = query(collection(db, 'lectures'), orderBy('id', 'asc'));
         try {
           const querySnapshot = await getDocs(q);
-          const lecturesData = querySnapshot.docs.map(doc => doc.data());
+          const lecturesData = querySnapshot.docs
+            .map(doc => doc.data())
+            .filter(doc => doc && doc.title); // VALIDATION: Ensure title exists
+
           if (lecturesData.length > 0) {
             setLectures(lecturesData);
           } else {
+            console.warn("Firestore returned empty or invalid data, using fallback.");
             setLectures(LECTURES);
           }
         } catch (e) {
