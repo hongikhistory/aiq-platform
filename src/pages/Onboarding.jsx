@@ -1,18 +1,26 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInAnonymously } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"; 
-import { auth, db } from '../firebase';
+import { signInWithPopup } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore"; 
+import { auth, db, googleProvider } from '../firebase';
 import Button from '../components/Button';
 import './Onboarding.css';
-import mascotImg from '../assets/mascot.png'; // Import local asset
+import mascotImg from '../assets/mascot.png';
+
+// Role Mapping Constants
+const ROLE_MAP = {
+  '기획': 'ROLE_PLAN',
+  '디자인': 'ROLE_DESIGN',
+  '개발': 'ROLE_DEV',
+  '창업': 'ROLE_FOUNDER'
+};
 
 export default function Onboarding() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(0); // 0: Intro, 1: Login, 2: Time, 3: Role
   const [introStep, setIntroStep] = useState(0);
-  // eslint-disable-next-line no-unused-vars
-  const [selectedRole, setSelectedRole] = useState('기획'); // Default
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const introData = [
     { slogan: "AI로 만드는 나만의 경쟁력", title: "내 업무 지능(AIQ)은 몇 점?", desc: "3분 만에 진단하고 딱 맞는 커리큘럼을 받아보세요." },
@@ -22,119 +30,186 @@ export default function Onboarding() {
 
   const handleIntroNext = () => {
     if (introStep < 2) setIntroStep(introStep + 1);
+    else setStep(1); // Go to Login
   };
 
-  const handleRoleSelect = async (role) => {
-    setSelectedRole(role);
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
     try {
-      // 1. Anonymous Sign In
-      const userCredential = await signInAnonymously(auth);
-      const user = userCredential.user;
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
       
-      // 2. Save User Data
+      // Check if user exists
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        // Existing user -> Go to Home
+        const userData = docSnap.data();
+        navigate('/home', { state: { userRole: userData.role || '기획' } });
+      } else {
+        // New user -> Go to Time Selection
+        setStep(2);
+      }
+    } catch (error) {
+      console.error("Login Failed:", error);
+      alert("로그인에 실패했습니다. 다시 시도해 주세요.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleTimeSelect = (time) => {
+    setSelectedTime(time);
+    // Slight delay for visual feedback
+    setTimeout(() => setStep(3), 300);
+  };
+
+  const handleRoleSelect = async (roleLabel) => {
+    setIsLoading(true);
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("로그인 정보가 없습니다. 다시 로그인해 주세요.");
+        setStep(1);
+        return;
+      }
+
+      const roleTag = ROLE_MAP[roleLabel];
+      
+      // Save User Data
       await setDoc(doc(db, "users", user.uid), {
-        role: role,
+        role: roleLabel, // Display name
+        roleTag: roleTag, // System tag
+        studyTime: selectedTime,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
         joinedAt: new Date(),
         isPremium: false,
         streak: 1
       });
 
+      navigate('/home', { state: { userRole: roleLabel } });
 
     } catch (error) {
-      console.error("Auth Error:", error);
+      console.error("Save Error:", error);
+      alert("정보 저장 중 오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
     }
-    
-    // Navigate with state
-    navigate('/home', { state: { userRole: role } });
   };
 
-  const handleNext = () => {
-    if (step < 4) {
-      setStep(step + 1);
-    } 
-  };
+  // Helper to render intro dots
+  const renderDots = () => (
+    <div className="landing-dots">
+      {[0, 1, 2].map(i => (
+        <div 
+          key={i} 
+          className={`landing-dot ${i === introStep ? 'active' : ''}`} 
+          onClick={() => setIntroStep(i)}
+        />
+      ))}
+    </div>
+  );
 
   return (
     <div className={`onboarding-page ${step === 0 ? 'landing-mode' : ''}`}>
-      {step === 0 ? (
-        // ... (Landing code same)
+      {/* Step 0: Intro Carousel */}
+      {step === 0 && (
         <div className="landing-container fade-in">
-           {/* ... keep existing landing code ... */}
            <h1 className="main-logo fade-in-down">AIQ</h1>
            <div className="landing-content">
              <div className="mascot-wrapper">
                <div className="mascot-bg-glow"></div>
-               <img src={mascotImg} className={`landing-mascot slide-${introStep}`} />
+               <img src={mascotImg} className={`landing-mascot slide-${introStep}`} alt="Mascot" />
              </div>
              <h3 className="landing-slogan fade-in-up">{introData[introStep].slogan}</h3>
              <div className="text-content fade-in-up">
                <h2 className="landing-title">{introData[introStep].title}</h2>
                <p className="landing-desc">{introData[introStep].desc}</p>
              </div>
-             <div className="landing-dots">
-               {[0, 1, 2].map(i => <div key={i} className={`landing-dot ${i === introStep ? 'active' : ''}`} onClick={() => setIntroStep(i)}/>)}
+             {renderDots()}
+           </div>
+           
+           <div className="landing-buttons fade-in">
+             <Button variant="primary" onClick={handleIntroNext}>
+               {introStep === 2 ? "시작하기" : "다음"}
+             </Button>
+             
+             <div className="login-link-container">
+               <span className="login-link-text">이미 계정이 있으신가요? </span>
+               <button className="login-link-btn" onClick={() => setStep(1)}>로그인</button>
              </div>
            </div>
-           <div className="landing-buttons fade-in">
-             {introStep === 2 ? (
-               <Button variant="primary" onClick={() => setStep(1)}>내 AI 지능(AIQ) 확인하기</Button>
-             ) : (
-               <Button variant="primary" onClick={handleIntroNext}>다음</Button>
-             )}
-             {introStep === 2 && <Button variant="secondary" onClick={() => navigate('/login')}>계정이 이미 있습니다</Button>}
-           </div>
         </div>
-      ) : (
-        // Wizard View
+      )}
+
+      {/* Wizard Steps (1, 2, 3) */}
+      {step > 0 && (
         <>
           <div className="mascot-container">
-            <img src={mascotImg} className="mascot-img" />
+            <img src={mascotImg} className="mascot-img" alt="Mascot" />
             <div className="mascot-speech">
-              {step === 1 && "안녕! 난 AIQ 앵무새야! 🦜 이메일이 뭐야?"}
-              {step === 2 && "반가워! 나이가 어떻게 돼?"}
-              {step === 3 && "공부는 언제 주로 해?"}
-              {step === 4 && "마지막이야! 어떤 일을 해?"}
+              {step === 1 && "반가워요! 구글로 간편하게 시작해 볼까요?"}
+              {step === 2 && "주로 언제 학습하시나요? 알맞은 시간에 리마인드 해드릴게요."}
+              {step === 3 && "마지막이에요! 현재 어떤 직무를 맡고 계신가요?"}
             </div>
           </div>
 
           <div className="step-content">
+            {/* Step 1: Google Login */}
             {step === 1 && (
-              <div className="fade-in">
-                <input type="email" placeholder="name@example.com" className="onboarding-input" />
-                <Button onClick={handleNext}>코드 보내기</Button>
+              <div className="fade-in login-step">
+                <Button variant="google" onClick={handleGoogleLogin} disabled={isLoading}>
+                  {isLoading ? '로그인 중...' : 'Google로 계속하기'}
+                </Button>
+                <p className="login-note">
+                  계정 생성 시 <span className="link">이용약관</span> 및 <span className="link">개인정보처리방침</span>에 동의하게 됩니다.
+                </p>
               </div>
             )}
 
+            {/* Step 2: Time Selection */}
             {step === 2 && (
               <div className="chips-grid fade-in">
-                {['10대', '20대', '30대', '40대 이상'].map(age => (
-                  <button key={age} className="chip-btn" onClick={handleNext}>{age}</button>
+                {['아침 ☀️', '점심 🍱', '저녁 🌙', '새벽 🦉'].map(time => (
+                  <button 
+                    key={time} 
+                    className={`chip-btn ${selectedTime === time ? 'active' : ''}`} 
+                    onClick={() => handleTimeSelect(time)}
+                  >
+                    {time}
+                  </button>
                 ))}
               </div>
             )}
 
+            {/* Step 3: Role Selection */}
             {step === 3 && (
               <div className="chips-grid fade-in">
-                {['아침 ☀️', '점심 🍱', '저녁 🌙', '새벽 🦉'].map(time => (
-                  <button key={time} className="chip-btn" onClick={handleNext}>{time}</button>
-                ))}
-              </div>
-            )}
-
-            {step === 4 && (
-              <div className="chips-grid fade-in">
-                 {['기획', '디자인', '개발', '창업'].map(role => (
-                   <button key={role} className="chip-btn" onClick={() => handleRoleSelect(role)}>{role}</button>
+                 {Object.keys(ROLE_MAP).map(role => (
+                   <button 
+                    key={role} 
+                    className="chip-btn" 
+                    onClick={() => handleRoleSelect(role)}
+                    disabled={isLoading}
+                   >
+                     {role}
+                   </button>
                  ))}
               </div>
             )}
           </div>
           
-          <div className="progress-dots">
-            {[1,2,3,4].map(i => (
-              <div key={i} className={`dot ${i === step ? 'active' : ''}`} />
-            ))}
-          </div>
+          {/* Progress Dots for Wizard */}
+          {step > 0 && (
+            <div className="progress-dots">
+              {[1, 2, 3].map(i => (
+                <div key={i} className={`dot ${i === step ? 'active' : ''}`} />
+              ))}
+            </div>
+          )}
         </>
       )}
     </div>

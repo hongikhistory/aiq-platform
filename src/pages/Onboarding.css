@@ -283,3 +283,63 @@
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.login-link-container {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #636E72;
+}
+
+.login-link-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+/* Button Variants */
+.btn-google {
+  background: white;
+  color: #2D3436;
+  border: 1px solid #DFE6E9;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-google:hover {
+  background: #F8F9FA;
+  border-color: #B2BEC3;
+}
+
+.login-note {
+  font-size: 12px;
+  color: #B2BEC3;
+  margin-top: 16px;
+  line-height: 1.5;
+}
+
+.link {
+  color: var(--text-main);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Updated Chip Active State */
+.chip-btn.active {
+  border-color: var(--primary);
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+  transform: translateY(-2px);
+}
+
+.chip-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
