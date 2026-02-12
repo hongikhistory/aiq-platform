@@ -9,7 +9,7 @@ export const LECTURES = [
     level: 'LV_BASIC',
     stack: 'Gemini',
     image: 'https://placehold.co/800x450/4285F4/FFFFFF?text=Deep+Research',
-    videoId: 'dQw4w9WgXcQ'
+    videoId: 'nTOVIGsqCuY'
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ export const LECTURES = [
     level: 'LV_ADVANCED',
     stack: 'Antigravity',
     image: 'https://placehold.co/800x450/2F3542/FFFFFF?text=Autonomous+Agent',
-    videoId: 'dQw4w9WgXcQ'
+    videoId: 'nTOVIGsqCuY'
   },
   {
     id: 3,
@@ -31,7 +31,7 @@ export const LECTURES = [
     level: 'LV_INTERMEDIATE',
     stack: 'Nanobanana',
     image: 'https://placehold.co/800x450/fab1a0/FFFFFF?text=UI+Prototyping',
-    videoId: 'dQw4w9WgXcQ'
+    videoId: 'nTOVIGsqCuY'
   },
   {
     id: 4,
@@ -42,7 +42,7 @@ export const LECTURES = [
     level: 'LV_BASIC',
     stack: 'Comet',
     image: 'https://placehold.co/800x450/a29bfe/FFFFFF?text=Team+Knowledge',
-    videoId: 'dQw4w9WgXcQ'
+    videoId: 'nTOVIGsqCuY'
   },
   {
     id: 5,
@@ -53,7 +53,7 @@ export const LECTURES = [
     level: 'LV_INTERMEDIATE',
     stack: 'Vibe',
     image: 'https://placehold.co/800x450/00b894/FFFFFF?text=Vibe+Coding',
-    videoId: 'dQw4w9WgXcQ'
+    videoId: 'nTOVIGsqCuY'
   },
   {
     id: 6,
@@ -64,6 +64,6 @@ export const LECTURES = [
     level: 'LV_BASIC',
     stack: 'ChatGPT',
     image: 'https://placehold.co/800x450/ff7675/FFFFFF?text=Auto+PRD',
-    videoId: 'dQw4w9WgXcQ'
+    videoId: 'nTOVIGsqCuY'
   }
 ];
