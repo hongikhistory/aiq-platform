@@ -4,35 +4,43 @@ import './AITrend.css';
 const TRENDS = [
   {
     id: 1,
-    title: 'GPT-5 루머: 지금까지 알려진 것들',
+    title: "앤트로픽, '클로드 오퍼스 4.6' 출시",
     type: 'new',
     date: '오늘',
-    source: 'OpenAI 유출',
-    desc: '멀티모달 기능의 비약적 향상이 예고되었습니다. 데이터 처리 속도가 2배 빨라질 것이라는 관측입니다.'
+    source: 'AI Times',
+    desc: '롱 컨텍스트와 에이전트 협업 기능을 대폭 강화한 새로운 모델이 공개되었습니다.'
   },
   {
     id: 2,
-    title: '미드저니 v7 알파 출시됨',
-    type: 'update',
-    date: '어제',
-    source: 'Midjourney',
-    desc: '더욱 정교해진 조명 효과와 텍스트 렌더링 능력을 경험해보세요.'
+    title: "구글, 논문 일러스트 생성 AI ‘페이퍼바나나’ 공개",
+    type: 'new',
+    date: '1일 전',
+    source: 'Google',
+    desc: '환각 현상을 낮추고 미적 기준을 높인 연구용 이미지 생성 도구입니다.'
   },
   {
     id: 3,
-    title: '클로드 3.5 오퍼스 벤치마크 공개',
+    title: "엔비디아, 로봇 월드 모델 ‘드림도조’ 발표",
     type: 'popular',
     date: '2일 전',
-    source: 'Anthropic',
-    desc: '코딩 능력 평가에서 GPT-4를 근소한 차이로 앞섰습니다.'
+    source: 'NVIDIA',
+    desc: '물리적 세계를 시뮬레이션하는 로봇 학습용 월드 모델이 공개되었습니다.'
   },
   {
     id: 4,
-    title: '스테이블 디퓨전 3 API 공개',
+    title: "오픈AI, 챗GPT 모델 라인업 전면 개편",
     type: 'update',
     date: '3일 전',
-    source: 'Stability AI',
-    desc: '타이포그래피 생성이 대폭 개선되었습니다.'
+    source: 'OpenAI',
+    desc: 'GPT-4o 제거 및 GPT-5.2 버전에 대한 새로운 방향성을 제시했습니다.'
+  },
+  {
+    id: 5,
+    title: "바이브 코딩 1년, 개발자들의 'AI 피로' 호소",
+    type: 'popular',
+    date: '3일 전',
+    source: 'AI Times',
+    desc: 'AI 코딩 도구 도입 1년 후, 생산성 향상의 이면에 감춰진 피로감이 드러나고 있습니다.'
   }
 ];
 
