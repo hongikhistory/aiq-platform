@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { User, LogOut, Settings, Award, BookOpen, Crown, Edit2, X } from 'lucide-react';
+import { User, LogOut, Settings, Award, BookOpen, Crown, Edit2, X, Share2 } from 'lucide-react';
 import StreakWidget from '../components/StreakWidget';
 import Badge from '../components/Badge';
+import Skeleton from '../components/Skeleton';
 import './Profile.css';
 
 // Import local avatar assets
@@ -20,6 +21,7 @@ export default function Profile() {
   const location = useLocation();
   const navigate = useNavigate();
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   
   const [user, setUser] = useState({
     name: '김홍익',
@@ -29,6 +31,12 @@ export default function Profile() {
     nextLevelXp: 1000,
     avatar: AVATARS[0].img // Default
   });
+
+  useEffect(() => {
+    // Simulate loading for premium feel
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleLogout = () => {
     if (window.confirm('로그아웃 하시겠습니까?')) {
@@ -41,11 +49,54 @@ export default function Profile() {
     setShowAvatarModal(false);
   };
 
+  if (loading) {
+    return (
+      <div className="profile-page">
+        <div className="profile-header glass">
+          <div className="header-actions">
+            <Skeleton type="text" width={24} height={24} />
+          </div>
+          <div className="profile-info">
+             <Skeleton type="avatar" style={{marginBottom: '16px'}} />
+             <Skeleton type="title" width={120} />
+             <Skeleton type="badge" />
+          </div>
+          <div className="xp-container">
+            <div className="xp-info">
+              <Skeleton type="text" width={40} />
+              <Skeleton type="text" width={80} />
+            </div>
+            <Skeleton type="text" height={8} width="100%" />
+          </div>
+        </div>
+        <div className="stats-grid">
+           <Skeleton type="card" height={100} />
+           <Skeleton type="card" height={100} />
+           <Skeleton type="card" height={100} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="profile-page animate-fade-in">
       {/* Profile Header */}
       <div className="profile-header glass">
         <div className="header-actions">
+          <button className="icon-btn" onClick={() => {
+            if (navigator.share) {
+              navigator.share({
+                title: `AIQ 프로필: ${user.name}`,
+                text: `${user.name}님의 AIQ 학습 레벨은 LV.${user.level}입니다! 🚀`,
+                url: window.location.href
+              });
+            } else {
+              navigator.clipboard.writeText(window.location.href);
+              alert('프로필 링크가 복사되었습니다!');
+            }
+          }}>
+            <Share2 size={24} />
+          </button>
           <Settings size={24} className="icon-btn" />
         </div>
         <div className="profile-info">
@@ -131,6 +182,19 @@ export default function Profile() {
           <LogOut size={20} className="menu-icon" />
           <span>로그아웃</span>
         </button>
+        
+        {/* Admin Only: Seed DB */}
+        {user.role === '기획자' && (
+          <button className="menu-item" onClick={async () => {
+             if(window.confirm('DB를 초기화하시겠습니까?')) {
+               const { seedDatabase } = await import('../utils/seedFirestore');
+               seedDatabase();
+             }
+          }} style={{marginTop: '20px', color: '#ff6b6b'}}>
+            <Settings size={20} className="menu-icon" />
+            <span>DB 초기화 (Admin)</span>
+          </button>
+        )}
       </div>
     </div>
   );

@@ -1,17 +1,21 @@
 import PathNode from './PathNode';
 import './LearningPath.css';
 
-export default function LearningPath({ lectures, onLectureClick }) {
-  // Mock Progress Logic:
-  // For demo, let's say:
-  // Index 0: Completed
-  // Index 1: Current
-  // Index 2+: Locked
-  // Real app would check user progress data.
-  
-  const getStatus = (index) => {
-    if (index === 0) return 'completed';
-    if (index === 1) return 'current';
+export default function LearningPath({ lectures, completedLectures = [], onLectureClick }) {
+  // Real Progress Logic
+  const getStatus = (index, lectureId) => {
+    // If this lecture is in completed list -> completed
+    if (completedLectures.includes(lectureId)) return 'completed';
+    
+    // If it's the first one, OR the previous one is completed -> current (unlock it)
+    // Otherwise -> locked
+    if (index === 0) return 'current';
+    
+    const prevLecture = lectures[index - 1];
+    if (prevLecture && completedLectures.includes(prevLecture.id)) {
+      return 'current';
+    }
+    
     return 'locked';
   };
 
@@ -22,7 +26,7 @@ export default function LearningPath({ lectures, onLectureClick }) {
           key={lecture.id}
           index={index}
           lecture={lecture}
-          status={getStatus(index)}
+          status={getStatus(index, lecture.id)}
           onClick={() => onLectureClick(lecture)}
         />
       ))}

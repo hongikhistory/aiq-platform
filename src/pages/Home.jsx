@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Flame, Search } from 'lucide-react';
 import LearningPath from '../components/LearningPath';
@@ -7,19 +7,53 @@ import StreakWidget from '../components/StreakWidget';
 import PremiumBanner from '../components/PremiumBanner';
 import RecommendedCourse from '../components/RecommendedCourse';
 import { LECTURES } from '../data/lectures';
+import { db, auth } from '../firebase';
+import { doc, getDoc, collection, getDocs, query, orderBy } from 'firebase/firestore';
 import './Home.css';
 
 const CATEGORIES = ['전체', '기획', '디자인', '개발', '창업'];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('전체');
-  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
   const userRole = location.state?.userRole || '기획';
 
+  // State
+  const [activeTab, setActiveTab] = useState('전체');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [completedLectures, setCompletedLectures] = useState([]);
+  const [lectures, setLectures] = useState([]);
+
+  // Fetch Data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = auth.currentUser;
+        
+        // 1. Fetch User Progress
+        if (user) {
+          const userRef = doc(db, 'users', user.uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            setCompletedLectures(userSnap.data().completedLectures || []);
+          }
+        }
+
+        // 2. Fetch Lectures
+        const q = query(collection(db, 'lectures'), orderBy('id', 'asc'));
+        const querySnapshot = await getDocs(q);
+        const lecturesData = querySnapshot.docs.map(doc => doc.data());
+        setLectures(lecturesData);
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   // Filter lectures locally
-  const lectures = LECTURES.filter(lecture => {
+  const filteredLectures = lectures.filter(lecture => {
     const matchesRole = activeTab === '전체' || lecture.role === activeTab;
     const matchesSearch = !searchQuery || 
       lecture.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -81,14 +115,16 @@ export default function Home() {
           
           <h3 className="section-title" style={{margin: '24px 0 12px 0', fontSize:'20px', fontWeight:'800'}}>전체 강의</h3>
           
-          {lectures.length > 0 ? (
-            lectures.map(lec => (
-              <LectureCard 
-                key={lec.id} 
-                {...lec} 
-                onClick={() => handleLectureClick(lec.id)}
-              />
-            ))
+          {filteredLectures.length > 0 ? (
+            <div className="lectures-grid animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+              {filteredLectures.map(lecture => (
+                <LectureCard 
+                  key={lecture.id}
+                  lecture={lecture}
+                  onClick={() => handleLectureClick(lecture.id)}
+                />
+              ))}
+            </div>
           ) : (
             <div className="empty-state">검색 결과가 없습니다.</div>
           )}
@@ -97,7 +133,8 @@ export default function Home() {
         // Path View
         <div className="path-view-area animate-fade-in">
           <LearningPath 
-            lectures={lectures} 
+            lectures={filteredLectures} 
+            completedLectures={completedLectures}
             onLectureClick={(lec) => handleLectureClick(lec.id)}
           />
         </div>
