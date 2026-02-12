@@ -47,14 +47,14 @@ export default function Onboarding() {
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        console.log("User exists, navigating to home.");
-        // Existing user -> Go to Home
+      if (docSnap.exists() && docSnap.data().role) {
+        console.log("User onboarding complete, navigating to home.");
+        // Existing user with Role -> Go to Home
         const userData = docSnap.data();
-        navigate('/home', { state: { userRole: userData.role || '기획' } });
+        navigate('/home', { state: { userRole: userData.role } });
       } else {
-        console.log("New user, moving to step 2.");
-        // New user -> Go to Time Selection
+        console.log("User onboarding incomplete (or new), moving to step 2.");
+        // New user OR existing user without role -> Go to Time Selection
         setStep(2);
       }
     } catch (error) {
