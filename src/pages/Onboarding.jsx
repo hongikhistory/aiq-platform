@@ -34,9 +34,17 @@ export default function Onboarding() {
   };
 
   const handleGoogleLogin = async () => {
+    // Check for mock config
+    if (auth.app.options.apiKey === "mock_key") {
+      alert("Firebase 설정이 올바르지 않습니다. .env 파일을 확인해주세요.");
+      return;
+    }
+
     setIsLoading(true);
     try {
+      console.log("Starting Google Login...");
       const result = await signInWithPopup(auth, googleProvider);
+      console.log("Login Success:", result.user.uid);
       const user = result.user;
       
       // Check if user exists
@@ -44,16 +52,24 @@ export default function Onboarding() {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
+        console.log("User exists, navigating to home.");
         // Existing user -> Go to Home
         const userData = docSnap.data();
         navigate('/home', { state: { userRole: userData.role || '기획' } });
       } else {
+        console.log("New user, moving to step 2.");
         // New user -> Go to Time Selection
         setStep(2);
       }
     } catch (error) {
-      console.error("Login Failed:", error);
-      alert("로그인에 실패했습니다. 다시 시도해 주세요.");
+      console.error("Login Failed Detail:", error);
+      if (error.code === 'auth/popup-closed-by-user') {
+        alert("로그인 창이 닫혔습니다. 다시 시도해 주세요.");
+      } else if (error.code === 'auth/configuration-not-found') {
+        alert("Firebase 인증 설정이 찾을 수 없습니다. 콘솔을 확인해주세요.");
+      } else {
+        alert(`로그인 오류: ${error.message}`);
+      }
     } finally {
       setIsLoading(false);
     }
