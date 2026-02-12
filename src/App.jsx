@@ -6,10 +6,13 @@ import AITrend from './pages/AITrend';
 import Profile from './pages/Profile';
 import LectureDetail from './pages/LectureDetail';
 
+import { ThemeProvider } from './context/ThemeContext';
+
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Onboarding />} />
           <Route path="home" element={<Home />} />
@@ -20,6 +23,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
