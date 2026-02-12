@@ -6,38 +6,27 @@ import LectureCard from '../components/LectureCard';
 import StreakWidget from '../components/StreakWidget';
 import PremiumBanner from '../components/PremiumBanner';
 import RecommendedCourse from '../components/RecommendedCourse';
+import { LECTURES } from '../data/lectures';
 import './Home.css';
 
 const CATEGORIES = ['전체', '기획', '디자인', '개발', '창업'];
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('전체');
-  const [lectures, setLectures] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
   const userRole = location.state?.userRole || '기획';
 
-  // Fetch lectures from backend
-  useEffect(() => {
-    const fetchLectures = async () => {
-      try {
-        const queryParams = new URLSearchParams();
-        if (activeTab !== '전체') queryParams.append('role', activeTab);
-        if (searchQuery) queryParams.append('q', searchQuery);
-        
-        const res = await fetch(`/api/lectures?${queryParams.toString()}`);
-        if (res.ok) {
-          const data = await res.json();
-          setLectures(data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch lectures:", error);
-      }
-    };
-
-    fetchLectures();
-  }, [activeTab, searchQuery]);
+  // Filter lectures locally
+  const lectures = LECTURES.filter(lecture => {
+    const matchesRole = activeTab === '전체' || lecture.role === activeTab;
+    const matchesSearch = !searchQuery || 
+      lecture.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      lecture.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    return matchesRole && matchesSearch;
+  });
 
   const handleLectureClick = (id) => {
     navigate(`/lecture/${id}`);

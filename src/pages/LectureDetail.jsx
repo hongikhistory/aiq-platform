@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, PlayCircle, CheckCircle } from 'lucide-react';
 import Button from '../components/Button';
 import Badge from '../components/Badge';
+import { LECTURES } from '../data/lectures';
 import './LectureDetail.css';
 
 export default function LectureDetail() {
@@ -12,20 +13,10 @@ export default function LectureDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch lecture details from our new backend
-    fetch(`/api/lectures/${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Network response was not ok');
-        return res.json();
-      })
-      .then(data => {
-        setLecture(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Failed to fetch lecture:", err);
-        setLoading(false);
-      });
+    // Simulate loading for better UX, or just set immediately
+    const found = LECTURES.find(l => l.id == id);
+    setLecture(found);
+    setLoading(false);
   }, [id]);
 
   if (loading) return <div className="loading-screen">Loading...</div>;
