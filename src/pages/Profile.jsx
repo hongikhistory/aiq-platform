@@ -1,27 +1,39 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { User, LogOut, Settings, Award, BookOpen, Crown } from 'lucide-react';
+import { User, LogOut, Settings, Award, BookOpen, Crown, Edit2, X } from 'lucide-react';
 import StreakWidget from '../components/StreakWidget';
 import Badge from '../components/Badge';
 import './Profile.css';
 
+const AVATARS = [
+  { id: 'planner', name: '기획자 올빼미', img: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Felix' }, // Fallback to adventurer for now
+  { id: 'designer', name: '디자이너 고양이', img: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Bella' },
+  { id: 'developer', name: '개발자 강아지', img: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Buster' }
+];
+
 export default function Profile() {
   const location = useLocation();
   const navigate = useNavigate();
-  // Mock User Data (Replace with Firebase Auth later)
-  const user = {
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  
+  const [user, setUser] = useState({
     name: '김홍익',
     role: location.state?.userRole || '기획자',
     level: 3,
     xp: 450,
     nextLevelXp: 1000,
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'
-  };
+    avatar: AVATARS[0].img // Default
+  });
 
   const handleLogout = () => {
     if (window.confirm('로그아웃 하시겠습니까?')) {
       navigate('/');
     }
+  };
+
+  const handleAvatarSelect = (avatarImg) => {
+    setUser(prev => ({ ...prev, avatar: avatarImg }));
+    setShowAvatarModal(false);
   };
 
   return (
@@ -32,8 +44,11 @@ export default function Profile() {
           <Settings size={24} className="icon-btn" />
         </div>
         <div className="profile-info">
-          <div className="avatar-wrapper">
+          <div className="avatar-wrapper" onClick={() => setShowAvatarModal(true)}>
              <img src={user.avatar} alt="User Avatar" className="profile-avatar" />
+             <div className="edit-overlay">
+               <Edit2 size={16} color="white" />
+             </div>
              <div className="level-badge">{user.level}</div>
           </div>
           <h1 className="user-name">{user.name}</h1>
@@ -51,6 +66,28 @@ export default function Profile() {
           </div>
         </div>
       </div>
+
+      {/* Avatar Modal */}
+      {showAvatarModal && (
+        <div className="modal-overlay animate-fade-in" onClick={() => setShowAvatarModal(false)}>
+          <div className="modal-content glass" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>캐릭터 선택</h3>
+              <button className="close-btn" onClick={() => setShowAvatarModal(false)}>
+                <X size={20} />
+              </button>
+            </div>
+            <div className="avatar-grid">
+              {AVATARS.map(av => (
+                <div key={av.id} className="avatar-option" onClick={() => handleAvatarSelect(av.img)}>
+                  <img src={av.img} alt={av.name} />
+                  <span>{av.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="stats-grid">
@@ -93,3 +130,4 @@ export default function Profile() {
     </div>
   );
 }
+
