@@ -5,10 +5,15 @@ import StreakWidget from '../components/StreakWidget';
 import Badge from '../components/Badge';
 import './Profile.css';
 
+// Import local avatar assets
+import owlImg from '../assets/avatars/planner-owl.png';
+import catImg from '../assets/avatars/designer-cat.png';
+import dogImg from '../assets/avatars/developer-dog.png';
+
 const AVATARS = [
-  { id: 'planner', name: '기획자 올빼미', img: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Felix' }, // Fallback to adventurer for now
-  { id: 'designer', name: '디자이너 고양이', img: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Bella' },
-  { id: 'developer', name: '개발자 강아지', img: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Buster' }
+  { id: 'planner', name: '기획자 올빼미', img: owlImg },
+  { id: 'designer', name: '디자이너 고양이', img: catImg },
+  { id: 'developer', name: '개발자 강아지', img: dogImg }
 ];
 
 export default function Profile() {
