@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { User, LogOut, Settings, Award, BookOpen, Crown, Edit2, X, Share2, Sun, Moon } from 'lucide-react';
+import { User, LogOut, Settings, Award, BookOpen, Crown, Edit2, X, Share2 } from 'lucide-react';
 import StreakWidget from '../components/StreakWidget';
 import Badge from '../components/Badge';
 import Skeleton from '../components/Skeleton';
 import './Profile.css';
-import { useTheme } from '../context/ThemeContext';
 
 // Import local avatar assets
 import owlImg from '../assets/avatars/planner-owl.png';
@@ -19,7 +18,6 @@ const AVATARS = [
 ];
 
 export default function Profile() {
-  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [showAvatarModal, setShowAvatarModal] = useState(false);
@@ -85,9 +83,6 @@ export default function Profile() {
       {/* Profile Header */}
       <div className="profile-header glass">
         <div className="header-actions">
-          <button className="icon-btn" onClick={toggleTheme} style={{marginRight: '8px'}}>
-            {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
-          </button>
           <button className="icon-btn" onClick={() => {
             if (navigator.share) {
               navigator.share({
