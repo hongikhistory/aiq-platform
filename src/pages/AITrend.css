@@ -1,0 +1,68 @@
+.ai-trend-page {
+  padding: 20px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 900;
+  margin: 0;
+}
+
+.header-badge {
+  font-size: 10px;
+  padding: 4px 8px;
+}
+
+.trend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trend-item {
+  background: white;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  transition: transform 0.2s;
+  border-left: 4px solid transparent;
+}
+
+.trend-item:hover {
+  transform: translateX(4px);
+  border-left-color: var(--secondary);
+}
+
+.trend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.trend-date {
+  font-size: 12px;
+  color: #B2BEC3;
+  font-weight: 600;
+}
+
+.trend-title {
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  color: var(--text-main);
+  line-height: 1.4;
+}
+
+.trend-source {
+  font-size: 12px;
+  color: var(--secondary);
+  font-weight: 700;
+}

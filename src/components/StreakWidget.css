@@ -1,0 +1,84 @@
+.streak-widget {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+  border: 1px solid #F1F2F6;
+}
+
+.streak-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.streak-number {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.streak-number .count {
+  font-size: 32px;
+  font-weight: 900;
+  color: #2D3436;
+}
+
+.streak-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.streak-text span:first-child {
+  font-weight: 800;
+  font-size: 16px;
+  color: #2D3436;
+}
+
+.sub-text {
+  font-size: 13px;
+  color: #636E72;
+  font-weight: 600;
+}
+
+.streak-days {
+  display: flex;
+  justify-content: space-between;
+}
+
+.day-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #F1F2F6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.day-circle.active {
+  background: #FF7675;
+  border-color: #FF7675;
+  color: white;
+}
+
+.day-circle.today {
+  border-color: #d63031;
+}
+
+.day-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #B2BEC3;
+  margin-top: 4px;
+  position: absolute;
+  bottom: -20px;
+}
+
+.day-circle.active .day-label {
+  color: #2D3436;
+}

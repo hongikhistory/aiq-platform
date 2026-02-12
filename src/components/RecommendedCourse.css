@@ -1,0 +1,88 @@
+.recommended-container {
+  margin-bottom: 32px;
+}
+
+.reco-header {
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.reco-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #B2BEC3;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.reco-role {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.reco-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid #F1F2F6;
+  display: flex;
+  flex-direction: column;
+}
+
+.reco-img-wrapper {
+  height: 160px;
+  position: relative;
+}
+
+.reco-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reco-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.reco-info {
+  padding: 16px;
+  text-align: left;
+}
+
+.reco-info h4 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.reco-info p {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  color: #636E72;
+  line-height: 1.5;
+}
+
+.start-btn {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.start-btn:active {
+  transform: scale(0.98);
+}

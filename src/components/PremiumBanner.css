@@ -1,0 +1,52 @@
+.premium-banner {
+  background: linear-gradient(135deg, #6C5CE7 0%, #a29bfe 100%);
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 16px rgba(108, 92, 231, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-banner::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 100px;
+  height: 100px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+
+.premium-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+
+.premium-icon {
+  font-size: 32px;
+  background: rgba(255,255,255,0.2);
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.premium-text h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.premium-text p {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+  font-weight: 600;
+}

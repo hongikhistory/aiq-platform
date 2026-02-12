@@ -1,0 +1,129 @@
+.home-page {
+  padding: 20px;
+}
+
+.top-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.logo {
+  justify-self: start;
+}
+
+.streak-container {
+  justify-self: center;
+}
+
+.avatar {
+  justify-self: end;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--secondary);
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.streak-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-weight: 800;
+  color: #FF7675;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #DFE6E9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  color: #636E72;
+}
+
+.tabs-scroll {
+  display: flex;
+  justify-content: space-between; /* Distribute evenly */
+  gap: 0; /* Let space-between handle spacing */
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 24px;
+  scrollbar-width: none;
+  width: 100%;
+}
+.tabs-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px; /* Slightly larger text */
+  color: var(--text-sub);
+  font-weight: 600;
+  padding: 8px 12px; /* Larger touch target */
+  white-space: nowrap;
+  position: relative;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.tab-btn.active {
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+.search-bar {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 14px 14px 14px 44px;
+  border: none;
+  background: white;
+  border-radius: var(--radius-lg);
+  font-family: inherit;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  transition: box-shadow 0.2s;
+}
+
+.search-bar input:focus {
+  outline: none;
+  box-shadow: 0 4px 16px rgba(108, 92, 231, 0.15);
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #B2BEC3;
+}

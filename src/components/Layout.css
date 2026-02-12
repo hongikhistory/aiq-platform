@@ -1,0 +1,16 @@
+.layout-container {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--bg-color);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  padding-bottom: 90px; /* Space for BottomNav + Safe Area */
+  overflow-y: auto;
+}
