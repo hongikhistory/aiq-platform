@@ -6,6 +6,8 @@ import './AITrend.css';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 
+import { TRENDS } from '../data/trends';
+
 export default function AITrend() {
   const [trends, setTrends] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,10 +22,12 @@ export default function AITrend() {
         if (trendsData.length > 0) {
           setTrends(trendsData);
         } else {
-            // Fallback or empty state
+          // Fallback to static data
+          setTrends(TRENDS);
         }
       } catch (error) {
         console.error("Error fetching trends:", error);
+        setTrends(TRENDS); // Fallback on error
       } finally {
         setLoading(false);
       }

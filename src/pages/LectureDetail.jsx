@@ -30,7 +30,7 @@ export default function LectureDetail() {
           const lectureData = lectureSnap.data();
           setLecture(lectureData);
           
-          // 2. Check Completion (Only if lecture exists)
+          // Check completion logic...
           const user = auth.currentUser;
           if (user) {
             const userRef = doc(db, "users", user.uid);
@@ -43,10 +43,30 @@ export default function LectureDetail() {
             }
           }
         } else {
-             // Handle not found (optional)
+             // Fallback to local data
+             const localLecture = LECTURES.find(l => l.id == id);
+             if (localLecture) {
+               setLecture(localLecture);
+               
+               // Check completion even for local data
+               const user = auth.currentUser;
+               if (user) {
+                 const userRef = doc(db, "users", user.uid);
+                 const userSnap = await getDoc(userRef);
+                 if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    if (userData.completedLectures?.includes(parseInt(id))) {
+                      setIsCompleted(true);
+                    }
+                 }
+               }
+             }
         }
       } catch (error) {
         console.error("Error fetching lecture:", error);
+        // Fallback on error
+        const localLecture = LECTURES.find(l => l.id == id);
+        if (localLecture) setLecture(localLecture);
       } finally {
         setLoading(false);
       }

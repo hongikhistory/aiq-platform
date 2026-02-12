@@ -41,12 +41,22 @@ export default function Home() {
 
         // 2. Fetch Lectures
         const q = query(collection(db, 'lectures'), orderBy('id', 'asc'));
-        const querySnapshot = await getDocs(q);
-        const lecturesData = querySnapshot.docs.map(doc => doc.data());
-        setLectures(lecturesData);
+        try {
+          const querySnapshot = await getDocs(q);
+          const lecturesData = querySnapshot.docs.map(doc => doc.data());
+          if (lecturesData.length > 0) {
+            setLectures(lecturesData);
+          } else {
+            setLectures(LECTURES);
+          }
+        } catch (e) {
+          console.warn("Firestore access usage error or empty, using fallback:", e);
+          setLectures(LECTURES);
+        }
 
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLectures(LECTURES); // Ensure data is shown
       }
     };
     fetchData();
