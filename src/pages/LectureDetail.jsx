@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, PlayCircle, CheckCircle } from 'lucide-react';
 import Button from '../components/Button';
@@ -9,17 +9,10 @@ import './LectureDetail.css';
 export default function LectureDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [lecture, setLecture] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate loading for better UX, or just set immediately
-    const found = LECTURES.find(l => l.id == id);
-    setLecture(found);
-    setLoading(false);
-  }, [id]);
-
-  if (loading) return <div className="loading-screen">Loading...</div>;
+  
+  // Derive state directly from data
+  const lecture = LECTURES.find(l => l.id == id);
+  
   if (!lecture) return <div className="error-screen">Lecture not found.</div>;
 
   return (
