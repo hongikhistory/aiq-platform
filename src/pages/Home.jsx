@@ -130,7 +130,7 @@ export default function Home() {
               {filteredLectures.map(lecture => (
                 <LectureCard 
                   key={lecture.id}
-                  lecture={lecture}
+                  {...lecture}
                   onClick={() => handleLectureClick(lecture.id)}
                 />
               ))}

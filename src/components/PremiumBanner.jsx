@@ -50,8 +50,9 @@ export default function PremiumBanner() {
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ orderId: data.orderID })
                 });
-                const orderData = await response.json();
-
+                await response.json();
+                
+                // Successful capture!
                 alert("결제가 완료되었습니다! 프리미엄 혜택을 즐기세요. 🎉");
                 setShowPayment(false);
               }}
